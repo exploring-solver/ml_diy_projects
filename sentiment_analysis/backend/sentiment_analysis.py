@@ -5,7 +5,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
 # Load Dataset
-df = pd.read_csv("IMDB Dataset.csv")
+df = pd.read_csv("IMDB Dataset.csv") 
 
 # Preprocessing
 df['sentiment'] = df['sentiment'].map({'positive': 1, 'negative': 0})
