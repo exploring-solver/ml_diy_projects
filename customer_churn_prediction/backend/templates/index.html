@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Churn Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #result {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Customer Churn Prediction</h1>
+    <form id="churnForm">
+        <label for="model">Select Model</label>
+        <select id="model" required>
+            <option value="logreg">Logistic Regression</option>
+            <option value="rf">Random Forest</option>
+            <option value="svm">Support Vector Machine</option>
+            <option value="knn">K-Nearest Neighbors</option>
+            <option value="gb">Gradient Boosting</option>
+        </select>
+
+        <label for="tenure">Tenure</label>
+        <input type="number" id="tenure" required>
+
+        <label for="monthlyCharges">Monthly Charges</label>
+        <input type="number" id="monthlyCharges" required>
+
+        <label for="totalCharges">Total Charges</label>
+        <input type="number" id="totalCharges" required>
+
+        <label for="gender">Gender (0 for Female, 1 for Male)</label>
+        <input type="number" id="gender" min="0" max="1" required>
+
+        <label for="phoneService">Phone Service (0 for No, 1 for Yes)</label>
+        <input type="number" id="phoneService" min="0" max="1" required>
+
+        <label for="paperlessBilling">Paperless Billing (0 for No, 1 for Yes)</label>
+        <input type="number" id="paperlessBilling" min="0" max="1" required>
+
+        <label for="familySize">Family Size</label>
+        <input type="number" id="familySize" required>
+
+        <label for="hasMultipleServices">Has Multiple Services</label>
+        <input type="number" id="hasMultipleServices" required>
+
+        <button type="submit">Predict Churn</button>
+    </form>
+
+    <div id="result"></div>
+</div>
+
+<script>
+    document.getElementById('churnForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const model = document.getElementById('model').value;
+        const tenure = document.getElementById('tenure').value;
+        const monthlyCharges = document.getElementById('monthlyCharges').value;
+        const totalCharges = document.getElementById('totalCharges').value;
+        const gender = document.getElementById('gender').value;
+        const phoneService = document.getElementById('phoneService').value;
+        const paperlessBilling = document.getElementById('paperlessBilling').value;
+        const familySize = document.getElementById('familySize').value;
+        const hasMultipleServices = document.getElementById('hasMultipleServices').value;
+
+        // Build the request payload
+        const data = {
+            model: model,
+            features: {
+                tenure: parseFloat(tenure),
+                MonthlyCharges: parseFloat(monthlyCharges),
+                TotalCharges: parseFloat(totalCharges),
+                gender: parseInt(gender),
+                PhoneService: parseInt(phoneService),
+                PaperlessBilling: parseInt(paperlessBilling),
+                FamilySize: parseInt(familySize),
+                HasMultipleServices: parseInt(hasMultipleServices)
+            }
+        };
+
+        // Send POST request to the Flask backend
+        const response = await fetch('/predict', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+        document.getElementById('result').innerHTML = `
+            <h3>Churn Prediction: ${result.churn_prediction ? 'Yes' : 'No'}</h3>
+            <p>Churn Probability: ${result.churn_probability.toFixed(2)}</p>
+        `;
+    });
+</script>
+
+</body>
+</html>
