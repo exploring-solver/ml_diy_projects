@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tom and Jerry Image Classification</title>
+</head>
+<body>
+    <h1>Upload an Image to Classify (Tom, Jerry, Both, or Neither)</h1>
+    
+    <form action="/predict" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" required>
+        <button type="submit">Upload and Classify</button>
+    </form>
+
+    {% if rf_result %}
+        <h2>Prediction (Random Forest):</h2>
+        <ul>
+            <li><strong>Random Forest:</strong> {{ rf_result }}</li>
+        </ul>
+        <h3>Uploaded Image:</h3>
+        <img src="{{ image_url }}" alt="Uploaded Image" style="max-width: 400px;">
+    {% endif %}
+
+    {% if error %}
+        <h2 style="color:red;">{{ error }}</h2>
+    {% endif %}
+</body>
+</html>
