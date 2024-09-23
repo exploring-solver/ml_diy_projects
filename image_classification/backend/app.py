@@ -3,6 +3,7 @@ import os
 import cv2
 import numpy as np
 import pickle
+from keras.models import load_model
 from werkzeug.utils import secure_filename
 
 # Initialize the Flask app
@@ -17,10 +18,13 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
 with open('models/rf_model_tom_and_jerry.pkl', 'rb') as rf_file:
     rf_model = pickle.load(rf_file)
 
+# Load CNN model
+cnn_model = load_model('models/cnn_model_tom_and_jerry.h5')
+
 # Define the label mapping
 label_mapping = {0: 'Tom', 1: 'Jerry', 2: 'Both', 3: 'Neither'}
 
-# Preprocessing function for images
+# Preprocessing function for Random Forest
 IMG_SIZE = (128, 128)
 
 def preprocess_image(image_path):
@@ -32,6 +36,16 @@ def preprocess_image(image_path):
         return img_flat
     return None
 
+# Preprocessing function for CNN
+def preprocess_image_for_cnn(image_path):
+    img = cv2.imread(image_path)
+    if img is not None:
+        img = cv2.resize(img, IMG_SIZE)
+        img = img / 255.0
+        img = img.reshape(1, IMG_SIZE[0], IMG_SIZE[1], 3)  # (1, 128, 128, 3) for CNN
+        return img
+    return None
+
 # Prediction function using Random Forest
 def predict_image_rf(image_path):
     img_flat = preprocess_image(image_path)
@@ -40,6 +54,16 @@ def predict_image_rf(image_path):
         rf_pred = rf_model.predict(img_flat)
         rf_result = label_mapping[rf_pred[0]]
         return rf_result
+    else:
+        return None
+
+# Prediction function using CNN
+def predict_image_cnn(image_path):
+    img = preprocess_image_for_cnn(image_path)  # Modify preprocessing as needed
+    if img is not None:
+        cnn_pred = cnn_model.predict(img)
+        cnn_result = label_mapping[np.argmax(cnn_pred)]
+        return cnn_result
     else:
         return None
 
@@ -64,44 +88,25 @@ def predict():
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
 
-        # Make prediction using only Random Forest
+        # Make prediction using Random Forest
         rf_result = predict_image_rf(filepath)
+        # Make prediction using CNN
+        cnn_result = predict_image_cnn(filepath)
 
-        if rf_result is None:
+        if rf_result is None or cnn_result is None:
             return render_template('index.html', error="Error processing image.")
         
-        return render_template('index.html', rf_result=rf_result, image_url=filepath)
+        return render_template('index.html', rf_result=rf_result, cnn_result=cnn_result, image_url=filepath)
 
 # Run the app
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
 
-# Future Addition (SVM and CNN)
+
+# nahi ho skta svm 800 mb ki pkl file h bhakk (SVM)
 # ---------------------------------------------------------
-# In the future, you can uncomment the following sections
-# when you are ready to add SVM and CNN back.
+# when ready to add SVM back.
 
 # # Load SVM model
 # with open('models/svm_model_tom_and_jerry.pkl', 'rb') as svm_file:
 #     svm_model = pickle.load(svm_file)
-
-# # Load CNN model
-# cnn_model = load_model('models/cnn_model_tom_and_jerry.h5')
-
-# def predict_image_svm(image_path):
-#     img_flat = preprocess_image(image_path)
-#     if img_flat is not None:
-#         svm_pred = svm_model.predict(img_flat)
-#         svm_result = label_mapping[svm_pred[0]]
-#         return svm_result
-#     else:
-#         return None
-
-# def predict_image_cnn(image_path):
-#     img = preprocess_image_for_cnn(image_path)  # Modify preprocessing as needed
-#     if img is not None:
-#         cnn_pred = cnn_model.predict(img)
-#         cnn_result = label_mapping[np.argmax(cnn_pred)]
-#         return cnn_result
-#     else:
-#         return None

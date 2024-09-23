@@ -132,13 +132,24 @@
     <ul>
         <li><strong>Random Forest:</strong> {{ rf_result }}</li>
     </ul>
-    <h3>Uploaded Image:</h3>
-    <img src="{{ image_url }}" alt="Uploaded Image" style="max-width: 400px;">
+    {% endif %}
+
+    {% if cnn_result %}
+    <h2>Prediction (CNN):</h2>
+    <ul>
+        <li><strong>CNN:</strong> {{ cnn_result }}</li>
+    </ul>
     {% endif %}
 
     {% if error %}
     <h2 style="color:red;">{{ error }}</h2>
     {% endif %}
+
+    {% if image_url %}
+    <h3>Uploaded Image:</h3>
+    <img src="{{ image_url }}" alt="Uploaded Image" style="max-width: 400px;">
+    {% endif %}
+
     <br>
     <br>
     <br>
