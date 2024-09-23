@@ -3,7 +3,7 @@ import os
 import cv2
 import numpy as np
 import pickle
-from keras.models import load_model
+# from keras.models import load_model # Commented out as it's causing server overload
 from werkzeug.utils import secure_filename
 
 # Initialize the Flask app
@@ -18,8 +18,8 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
 with open('models/rf_model_tom_and_jerry.pkl', 'rb') as rf_file:
     rf_model = pickle.load(rf_file)
 
-# Load CNN model
-cnn_model = load_model('models/cnn_model_tom_and_jerry.h5')
+# CNN model is commented out to reduce server overload
+# cnn_model = load_model('models/cnn_model_tom_and_jerry.h5')  # Commented out
 
 # Define the label mapping
 label_mapping = {0: 'Tom', 1: 'Jerry', 2: 'Both', 3: 'Neither'}
@@ -36,15 +36,17 @@ def preprocess_image(image_path):
         return img_flat
     return None
 
-# Preprocessing function for CNN
-def preprocess_image_for_cnn(image_path):
-    img = cv2.imread(image_path)
-    if img is not None:
-        img = cv2.resize(img, IMG_SIZE)
-        img = img / 255.0
-        img = img.reshape(1, IMG_SIZE[0], IMG_SIZE[1], 3)  # (1, 128, 128, 3) for CNN
-        return img
-    return None
+# CNN preprocessing and prediction functions are commented out
+# as we are not using CNN model
+
+# def preprocess_image_for_cnn(image_path):
+#     img = cv2.imread(image_path)
+#     if img is not None:
+#         img = cv2.resize(img, IMG_SIZE)
+#         img = img / 255.0
+#         img = img.reshape(1, IMG_SIZE[0], IMG_SIZE[1], 3)  # (1, 128, 128, 3) for CNN
+#         return img
+#     return None
 
 # Prediction function using Random Forest
 def predict_image_rf(image_path):
@@ -57,15 +59,15 @@ def predict_image_rf(image_path):
     else:
         return None
 
-# Prediction function using CNN
-def predict_image_cnn(image_path):
-    img = preprocess_image_for_cnn(image_path)  # Modify preprocessing as needed
-    if img is not None:
-        cnn_pred = cnn_model.predict(img)
-        cnn_result = label_mapping[np.argmax(cnn_pred)]
-        return cnn_result
-    else:
-        return None
+# CNN prediction function commented out
+# def predict_image_cnn(image_path):
+#     img = preprocess_image_for_cnn(image_path)  # Modify preprocessing as needed
+#     if img is not None:
+#         cnn_pred = cnn_model.predict(img)
+#         cnn_result = label_mapping[np.argmax(cnn_pred)]
+#         return cnn_result
+#     else:
+#         return None
 
 # Routes
 @app.route('/')
@@ -90,23 +92,23 @@ def predict():
 
         # Make prediction using Random Forest
         rf_result = predict_image_rf(filepath)
-        # Make prediction using CNN
-        cnn_result = predict_image_cnn(filepath)
+        # CNN prediction is commented out
+        # cnn_result = predict_image_cnn(filepath)
 
-        if rf_result is None or cnn_result is None:
+        if rf_result is None:
             return render_template('index.html', error="Error processing image.")
         
-        return render_template('index.html', rf_result=rf_result, cnn_result=cnn_result, image_url=filepath)
+        # Rendering only Random Forest result
+        return render_template('index.html', rf_result=rf_result, image_url=filepath)
 
 # Run the app
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
 
-
-# nahi ho skta svm 800 mb ki pkl file h bhakk (SVM)
+# SVM model logic (currently commented)
 # ---------------------------------------------------------
 # when ready to add SVM back.
-
+# 
 # # Load SVM model
 # with open('models/svm_model_tom_and_jerry.pkl', 'rb') as svm_file:
 #     svm_model = pickle.load(svm_file)
