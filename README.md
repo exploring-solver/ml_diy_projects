@@ -8,9 +8,9 @@ But no, data cleaning, preprocessing, splitting is a thing, and deployment is wh
 
 **Projects Completed:**
 - **Churninator3000:** Done
-- **PixelPolice:** Done
-- **VibeChecker:** Done
-- **TrendProphet:** Done
+- **PixelPolice:** Done (21-09-2024)
+- **VibeChecker:** Done (22-09-2024)
+- **TrendProphet:** Done (22-09-2024)
 
 ---
 
