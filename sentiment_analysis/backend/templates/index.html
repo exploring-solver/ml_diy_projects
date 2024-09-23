@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibechecker - Sentiment Analysis</title>
+    <style>
+        body {
+            background-color: #f0f8ff;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            color: #333;
+        }
+        header {
+            background-color: #f2f2f2;
+            padding: 20px;
+            border-bottom: 2px solid #ccc;
+        }
+        h1 {
+            color: #6b705c;
+        }
+        .container {
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            width: 50%;
+            margin: auto;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #2a9d8f;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #264653;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #e76f51;
+        }
+        footer {
+            margin-top: 30px;
+            padding: 10px;
+            background-color: #264653;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Vibechecker: Sentiment Analysis</h1>
+        <p>Feel the vibe, stay peaceful!</p>
+    </header>
+    
+    <div class="container">
+        <h2>Enter a Movie Review:</h2>
+        <form method="POST" action="/predict">
+            <textarea name="review" rows="4" placeholder="Type your movie review here..."></textarea>
+            <br><br>
+            <button type="submit">Check Vibe</button>
+        </form>
+        
+        {% if prediction_text %}
+        <div class="result">
+            <h3>{{ prediction_text }}</h3>
+        </div>
+        {% endif %}
+    </div>
+
+    <footer>
+        <p>Made with peace and harmony</p>
+    </footer>
+</body>
+</html>
