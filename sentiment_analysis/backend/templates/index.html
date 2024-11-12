@@ -6,11 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vibechecker - Sentiment Analysis</title>
     <style>
+        /* Basic styling */
         body {
-            background-color: #eef2f3;
+            background-color: #f0f4f8;
             font-family: 'Arial', sans-serif;
             color: #333;
             margin: 0;
+            overflow-x: hidden;
         }
         header {
             background-color: #264653;
@@ -19,11 +21,14 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
         }
         header h1 {
             margin: 0;
             font-size: 1.8rem;
             color: #f4a261;
+            cursor: pointer;
+            animation: fadeInDown 1.2s ease-out;
         }
         .navbar {
             display: flex;
@@ -36,76 +41,119 @@
             font-weight: bold;
             padding: 8px 12px;
             border-radius: 4px;
+            animation: fadeIn 1.5s ease-in-out;
         }
         .navbar a:hover {
             background-color: #f4a261;
             color: #264653;
         }
+
+        /* Container styling */
         .container {
-            margin: 40px auto;
+            margin: 60px auto;
             padding: 30px;
             background-color: #ffffff;
             box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
             border-radius: 10px;
             width: 50%;
             text-align: center;
+            position: relative;
+            animation: fadeInUp 1.2s ease-out;
         }
         h2 {
             color: #2a9d8f;
             margin-bottom: 10px;
+            font-size: 1.6rem;
         }
-        input[type="text"], textarea {
+        p {
+            color: #555;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        
+        /* Input styling */
+        textarea {
             width: 100%;
             padding: 12px;
             margin: 12px 0;
             border: 2px solid #ddd;
             border-radius: 6px;
+            font-size: 1rem;
+            resize: none;
         }
         button {
-            background-color: #2a9d8f;
+            background-color: #e76f51;
             color: white;
             padding: 12px 25px;
             border: none;
             border-radius: 6px;
             font-size: 1rem;
             cursor: pointer;
-            margin-top: 10px;
+            transition: background-color 0.3s ease;
         }
         button:hover {
-            background-color: #1d7071;
+            background-color: #264653;
         }
+
+        /* Animation effects */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .result {
             margin-top: 20px;
             font-size: 1.2rem;
             color: #e76f51;
+            animation: fadeIn 1s ease-out;
         }
+
         .info {
-            margin: 40px auto;
-            text-align: left;
-            padding: 20px;
-            background-color: #f9f9f9;
+            margin: 50px auto;
+            padding: 25px;
+            background-color: #fafafa;
             width: 70%;
             border-left: 5px solid #264653;
             border-radius: 8px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            animation: fadeIn 1.5s ease-in-out;
         }
-        .info h3 {
-            color: #264653;
-            font-size: 1.5rem;
-            margin-bottom: 10px;
+
+        /* Icon placeholders */
+        .icon {
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 100px;
+            height: 100px;
+            opacity: 1;
         }
-        .info p {
-            color: #555;
-            font-size: 1rem;
-            line-height: 1.6;
+        .icon-left {
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            width: 100px;
+            height: 100px;
+            opacity: 1;
         }
+
         footer {
-            margin-top: 50px;
+            margin-top: 60px;
             padding: 15px;
             background-color: #264653;
             color: white;
             text-align: center;
             font-size: 0.9rem;
+            animation: fadeIn 1.5s ease-in-out;
         }
     </style>
 </head>
@@ -135,6 +183,7 @@
         {% endif %}
     </div>
 
+    <!-- Placeholder for popcorn or movie theme icons -->
     <div class="info">
         <h3>About Vibechecker</h3>
         <p>
@@ -143,6 +192,8 @@
         <p>
             This project demonstrates how machine learning can be applied to real-world problems in sentiment analysis, providing valuable insights into user-generated content. Try it out by entering your review above and let Vibechecker reveal the sentiment behind your words.
         </p>
+        <img src="https://imgs.search.brave.com/uhH6qCGYhbIiZ7_56ZzA_8N_jtwQ4lXKEjgMwm7am50/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTEy/NDc0NTA0Ni9waG90/by9mcmVzaC1wb3Bj/b3JuLmpwZz9zPTYx/Mng2MTImdz0wJms9/MjAmYz1fTWNSbldM/Ml9SOHpKQ3Fla0h5/SUYtX0kyMzFPS0gw/dWU1SU5xeVllMThR/PQ" alt="popcorn icon" class="icon">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMUNrS1-0g7UY8R8XxprEANTRHuIn_WNthnA&s" alt="film reel icon" class="icon-left">
     </div>
 
     <footer>
